@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFounder AI - Complete Platform Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #F7FAFC 0%, #E0F2F4 100%);
+            color: #1A2332;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .nav {
+            background: white;
+            border-bottom: 1px solid #CBD5E0;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 126, 143, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #007E8F;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #007E8F 0%, #00B4A6 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.25rem;
+            transform: rotate(-3deg);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 126, 143, 0.12);
+            border: 1px solid rgba(0, 126, 143, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #007E8F 0%, #00B4A6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            color: #1A2332;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            background: #F7FAFC;
+            height: 8px;
+            border-radius: 100px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007E8F 0%, #00B4A6 100%);
+            border-radius: 100px;
+            transition: width 0.5s ease;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: #1A2332;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid #CBD5E0;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #007E8F;
+            box-shadow: 0 0 0 4px #E0F2F4;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-accent {
+            background: #00B4A6;
+            color: white;
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 180, 166, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #007E8F;
+            border: 2px solid #007E8F;
+        }
+
+        .btn-outline:hover {
+            background: #007E8F;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-screen {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .check-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #007E8F 0%, #00B4A6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .document-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .document-item {
+            padding: 1.5rem;
+            border: 2px solid #CBD5E0;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .document-item:hover {
+            border-color: #007E8F;
+            background: #F7FAFC;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 2rem 1rem; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">CF</div>
+                CareFounder AI
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Step 1: Business Info -->
+        <div id="step1" class="card">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span style="font-weight: 600; color: #007E8F;">Step 1 of 3</span>
+                <span style="color: #718096;">~5 minutes</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 33%"></div>
+            </div>
+
+            <h2>Business Information</h2>
+            <p style="color: #4A5568; margin-bottom: 2rem;">Let's start with the basics</p>
+
+            <div class="input-group">
+                <label class="input-label">Business Name *</label>
+                <input type="text" class="input" id="businessName" placeholder="e.g., Caring Hearts Homecare">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Business Address *</label>
+                <input type="text" class="input" id="businessAddress" placeholder="Full address including postcode">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Business Phone *</label>
+                <input type="tel" class="input" id="businessPhone" placeholder="e.g., 020 1234 5678">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Director Name *</label>
+                <input type="text" class="input" id="directorName" placeholder="Full name">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Director Email *</label>
+                <input type="email" class="input" id="directorEmail" placeholder="email@example.com">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" disabled>← Back</button>
+                <button class="btn btn-accent" onclick="goToStep2()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Service Details -->
+        <div id="step2" class="card hidden">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span style="font-weight: 600; color: #007E8F;">Step 2 of 3</span>
+                <span style="color: #718096;">~5 minutes</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 66%"></div>
+            </div>
+
+            <h2>Service Details</h2>
+            <p style="color: #4A5568; margin-bottom: 2rem;">Tell us about your care service</p>
+
+            <div class="input-group">
+                <label class="input-label">Care Type *</label>
+                <select class="input" id="careType">
+                    <option value="">Select...</option>
+                    <option value="Domiciliary Care">Domiciliary Care</option>
+                    <option value="Supported Living">Supported Living</option>
+                    <option value="Residential Care">Residential Care</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Service Area Postcode *</label>
+                <input type="text" class="input" id="postcode" placeholder="e.g., SW1A 1AA">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Expected Number of Service Users *</label>
+                <select class="input" id="capacity">
+                    <option value="">Select...</option>
+                    <option value="5-20">5-20 service users</option>
+                    <option value="20-50">20-50 service users</option>
+                    <option value="50+">50+ service users</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Registered Manager Name *</label>
+                <input type="text" class="input" id="managerName" placeholder="Full name">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Registered Manager Qualification *</label>
+                <input type="text" class="input" id="managerQual" placeholder="e.g., Level 5 Diploma in Leadership">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="goToStep1()">← Back</button>
+                <button class="btn btn-accent" onclick="goToStep3()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Review & Generate -->
+        <div id="step3" class="card hidden">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span style="font-weight: 600; color: #007E8F;">Step 3 of 3</span>
+                <span style="color: #718096;">Final step!</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+            </div>
+
+            <h2>Review & Generate</h2>
+            <p style="color: #4A5568; margin-bottom: 2rem;">Review your information before we generate your documents</p>
+
+            <div id="reviewContent" style="background: #E0F2F4; padding: 2rem; border-radius: 16px; margin-bottom: 2rem;">
+                <!-- Review content will be inserted here -->
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="goToStep2()">← Back</button>
+                <button class="btn btn-accent" onclick="generateDocuments()">Generate My Documents →</button>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="success" class="card hidden">
+            <div class="success-screen">
+                <div class="check-circle">✓</div>
+                <h1>Documents Generated!</h1>
+                <p style="color: #4A5568; font-size: 1.125rem; margin-bottom: 3rem;">
+                    Your CareFounder AI documents are ready to download
+                </p>
+
+                <ul class="document-list">
+                    <li class="document-item">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.125rem; margin-bottom: 0.25rem;">📄 Statement of Purpose</div>
+                            <div style="color: #718096; font-size: 0.875rem;">Generated just now</div>
+                        </div>
+                        <button class="btn btn-accent" onclick="downloadDocument()">Download</button>
+                    </li>
+                    <li class="document-item">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.125rem; margin-bottom: 0.25rem;">🎨 Logo & Branding</div>
+                            <div style="color: #718096; font-size: 0.875rem;">3 options included</div>
+                        </div>
+                        <button class="btn btn-accent" onclick="alert('Demo: Full version includes downloadable logos, ID badges, and business cards')">View</button>
+                    </li>
+                    <li class="document-item">
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.125rem; margin-bottom: 0.25rem;">🌐 Website Content</div>
+                            <div style="color: #718096; font-size: 0.875rem;">AI-written, ready to use</div>
+                        </div>
+                        <button class="btn btn-accent" onclick="showWebsiteContent()">View</button>
+                    </li>
+                </ul>
+
+                <div style="margin-top: 3rem;">
+                    <button class="btn btn-accent" onclick="resetDemo()" style="margin-right: 1rem;">Start Over</button>
+                    <button class="btn btn-outline" onclick="alert('Demo: Interview Prep tool available in full version')">Try Interview Prep →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let formData = {};
+
+        function goToStep1() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+        }
+
+        function goToStep2() {
+            // Collect step 1 data
+            formData.businessName = document.getElementById('businessName').value;
+            formData.businessAddress = document.getElementById('businessAddress').value;
+            formData.businessPhone = document.getElementById('businessPhone').value;
+            formData.directorName = document.getElementById('directorName').value;
+            formData.directorEmail = document.getElementById('directorEmail').value;
+
+            // Validate
+            if (!formData.businessName || !formData.businessAddress) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+
+        function goToStep3() {
+            // Collect step 2 data
+            formData.careType = document.getElementById('careType').value;
+            formData.postcode = document.getElementById('postcode').value;
+            formData.capacity = document.getElementById('capacity').value;
+            formData.managerName = document.getElementById('managerName').value;
+            formData.managerQual = document.getElementById('managerQual').value;
+
+            // Validate
+            if (!formData.careType || !formData.postcode) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Show review
+            const reviewHTML = `
+                <h3 style="margin-bottom: 1rem;">Business Details</h3>
+                <p><strong>Name:</strong> ${formData.businessName}</p>
+                <p><strong>Address:</strong> ${formData.businessAddress}</p>
+                <p><strong>Phone:</strong> ${formData.businessPhone}</p>
+                <p><strong>Care Type:</strong> ${formData.careType}</p>
+                <p><strong>Service Area:</strong> ${formData.postcode}</p>
+                <p><strong>Capacity:</strong> ${formData.capacity} service users</p>
+                
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Director</h3>
+                <p><strong>Name:</strong> ${formData.directorName}</p>
+                <p><strong>Email:</strong> ${formData.directorEmail}</p>
+                
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Registered Manager</h3>
+                <p><strong>Name:</strong> ${formData.managerName}</p>
+                <p><strong>Qualification:</strong> ${formData.managerQual}</p>
+            `;
+            
+            document.getElementById('reviewContent').innerHTML = reviewHTML;
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+
+        function generateDocuments() {
+            // Simulate generation
+            document.getElementById('step3').classList.add('hidden');
+            
+            // Show success after 2 seconds
+            setTimeout(() => {
+                document.getElementById('success').classList.remove('hidden');
+            }, 2000);
+        }
+
+        function downloadDocument() {
+            // Generate simple text document
+            const docContent = `STATEMENT OF PURPOSE
+            
+${formData.businessName}
+
+Business Information:
+- Name: ${formData.businessName}
+- Address: ${formData.businessAddress}
+- Phone: ${formData.businessPhone}
+- Care Type: ${formData.careType}
+- Service Area: ${formData.postcode}
+- Capacity: ${formData.capacity}
+
+Director:
+- Name: ${formData.directorName}
+- Email: ${formData.directorEmail}
+
+Registered Manager:
+- Name: ${formData.managerName}
+- Qualification: ${formData.managerQual}
+
+Service Description:
+${formData.businessName} provides ${formData.careType} services in the ${formData.postcode} area. We are committed to delivering high-quality, person-centred care to ${formData.capacity} service users.
+
+Generated by CareFounder AI
+`;
+
+            // Create download
+            const blob = new Blob([docContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Statement_of_Purpose.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showWebsiteContent() {
+            alert(`WEBSITE CONTENT FOR ${formData.businessName}
+
+HOME PAGE:
+Welcome to ${formData.businessName} - providing exceptional ${formData.careType} in the ${formData.postcode} area. We're committed to delivering person-centred care that enables our service users to live fulfilling, independent lives.
+
+ABOUT US:
+${formData.businessName} was founded with a simple mission: to provide high-quality, compassionate care that truly makes a difference.
+
+This is a demo - full version includes complete 5-page website content.`);
+        }
+
+        function resetDemo() {
+            formData = {};
+            document.getElementById('success').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            // Clear all inputs
+            document.querySelectorAll('input, select').forEach(input => input.value = '');
+        }
+    </script>
+</body>
+</html>
