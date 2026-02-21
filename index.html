@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFounder AI - Complete Care Business Launch Platform</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #007E8F;
+            --primary-dark: #005F6B;
+            --primary-light: #E0F2F4;
+            --accent: #00B4A6;
+            --accent-warm: #FFB347;
+            --accent-soft: #FFF4E6;
+            --dark: #1A2332;
+            --gray-900: #2D3748;
+            --gray-700: #4A5568;
+            --gray-500: #718096;
+            --gray-300: #CBD5E0;
+            --gray-100: #F7FAFC;
+            --white: #FFFFFF;
+            --success: #38A169;
+            --warning: #DD6B20;
+            --error: #E53E3E;
+            
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --shadow-sm: 0 2px 8px rgba(0, 126, 143, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 126, 143, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 126, 143, 0.16);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #F7FAFC 0%, #E0F2F4 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 { font-size: 1.875rem; color: var(--dark); }
+
+        .nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-300);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 800;
+            font-size: 1.25rem;
+            transform: rotate(-3deg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-link.active { color: var(--primary); background: var(--primary-light); }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0, 126, 143, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+        .card:hover::before { transform: scaleX(1); }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+            letter-spacing: -0.01em;
+        }
+
+        .btn-primary { background: var(--white); color: var(--primary); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-accent { background: var(--accent); color: var(--white); }
+        .btn-accent:hover { background: var(--accent); transform: translateY(-2px) scale(1.02); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; }
+        .btn-outline:hover { background: var(--primary); color: var(--white); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .progress-bar {
+            background: var(--gray-100);
+            height: 8px;
+            border-radius: 100px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 100px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(0, 180, 166, 0.3);
+        }
+
+        .questionnaire { max-width: 900px; margin: 0 auto; }
+
+        .input-group { margin-bottom: 1.5rem; }
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .radio-group { display: grid; gap: 1rem; }
+        .radio-option { position: relative; cursor: pointer; }
+        .radio-input { position: absolute; opacity: 0; }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .radio-input:checked + .radio-label {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .radio-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-soft) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .logo-option {
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logo-option input { position: absolute; opacity: 0; }
+        
+        .logo-display {
+            aspect-ratio: 1;
+            border: 3px solid var(--gray-300);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 800;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .logo-option input:checked + .logo-display {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            border: 4px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.25rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .voice-btn {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .voice-btn:hover {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .voice-btn.recording {
+            background: var(--error);
+            color: var(--white);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+            font-weight: 800;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+            margin: 2rem 0;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--gray-700);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .tab:hover { color: var(--primary); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        .feedback-list {
+            list-style: none;
+        }
+
+        .feedback-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .feedback-icon {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--success);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .feedback-icon.improvement { background: var(--warning); }
+
+        @media (max-width: 768px) {
+            .container { padding: 2rem 1rem; }
+            h1 { font-size: 2rem; }
+            .input-grid { grid-template-columns: 1fr; }
+            .logo-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Simulate AI API call (in production, this calls OpenAI/Claude)
+        const simulateAI = async (prompt, delay = 2000) => {
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return prompt; // Return prompt for now, would be AI response in production
+        };
+
+        // Analyze interview answer with AI-like scoring
+        const analyzeAnswer = (answer) => {
+            const wordCount = answer.split(' ').filter(w => w).length;
+            const hasExamples = answer.toLowerCase().includes('example') || answer.toLowerCase().includes('instance');
+            const hasRegulations = answer.toLowerCase().includes('regulation') || answer.toLowerCase().includes('cqc');
+            const hasSpecifics = answer.toLowerCase().includes('safeguard') || answer.toLowerCase().includes('policy');
+            
+            // Calculate score based on answer quality
+            let score = 5; // Base score
+            if (wordCount > 200) score += 1;
+            if (wordCount > 400) score += 1;
+            if (hasExamples) score += 1.5;
+            if (hasRegulations) score += 1;
+            if (hasSpecifics) score += 0.5;
+            
+            score = Math.min(10, score); // Cap at 10
+
+            const strengths = [];
+            const improvements = [];
+
+            if (hasExamples) {
+                strengths.push("Provided concrete examples which demonstrates practical understanding");
+            } else {
+                improvements.push("Add specific examples from your experience to strengthen your answer");
+            }
+
+            if (hasRegulations) {
+                strengths.push("Referenced regulatory framework (Regulation 13, CQC standards)");
+            } else {
+                improvements.push("Mention specific regulations like Regulation 13 or the Care Act 2014");
+            }
+
+            if (wordCount > 300) {
+                strengths.push("Comprehensive response showing depth of knowledge");
+            } else {
+                improvements.push("Expand your answer with more detail - aim for 500-800 words");
+            }
+
+            if (hasSpecifics) {
+                strengths.push("Demonstrated understanding of safeguarding principles and policies");
+            }
+
+            return {
+                score: Math.round(score * 10) / 10,
+                strengths,
+                improvements,
+                wordCount
+            };
+        };
+
+        // Navigation Component
+        function Navigation({ currentView, setCurrentView }) {
+            return (
+                <nav className="nav">
+                    <div className="nav-container">
+                        <a href="#" className="logo" onClick={(e) => { e.preventDefault(); setCurrentView('questionnaire'); }}>
+                            <div className="logo-icon">CF</div>
+                            CareFounder AI
+                        </a>
+                        <ul className="nav-menu">
+                            <li><a href="#" className={`nav-link ${currentView === 'questionnaire' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); setCurrentView('questionnaire'); }}>Setup</a></li>
+                            <li><a href="#" className={`nav-link ${currentView === 'documents' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); setCurrentView('documents'); }}>Documents</a></li>
+                            <li><a href="#" className={`nav-link ${currentView === 'interview' ? 'active' : ''}`} onClick={(e) => { e.preventDefault(); setCurrentView('interview'); }}>Interview Prep</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            );
+        }
+
+        // Full Questionnaire Component
+        function Questionnaire({ businessData, setBusinessData, setCurrentView }) {
+            const [currentStep, setCurrentStep] = useState(1);
+            const [directors, setDirectors] = useState([{
+                name: '', phone: '', email: '', position: '', country: '', dob: '', birthPlace: '', address: '', occupation: ''
+            }]);
+            const [registeredManager, setRegisteredManager] = useState({
+                name: '', address: '', email: '', phone: '', qualification: ''
+            });
+
+            const totalSteps = 8;
+            const progress = (currentStep / totalSteps) * 100;
+
+            const handleNext = () => {
+                if (currentStep < totalSteps) {
+                    setCurrentStep(currentStep + 1);
+                } else {
+                    setBusinessData({
+                        ...businessData,
+                        directors,
+                        registeredManager
+                    });
+                    setCurrentView('generating');
+                }
+            };
+
+            const handleBack = () => {
+                if (currentStep > 1) setCurrentStep(currentStep - 1);
+            };
+
+            const addDirector = () => {
+                setDirectors([...directors, { name: '', phone: '', email: '', position: '', country: '', dob: '', birthPlace: '', address: '', occupation: '' }]);
+            };
+
+            return (
+                <div className="container">
+                    <div className="questionnaire">
+                        <div style={{ marginBottom: '3rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                <span style={{ fontWeight: '600', color: 'var(--primary)' }}>Step {currentStep} of {totalSteps}</span>
+                                <span style={{ color: 'var(--gray-500)' }}>~20 minutes</span>
+                            </div>
+                            <div className="progress-bar">
+                                <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            {currentStep === 1 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Business Information</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>Let's start with your business basics</p>
+                                    
+                                    <div className="input-group">
+                                        <label className="input-label">Business Name *</label>
+                                        <input 
+                                            type="text" 
+                                            className="input" 
+                                            placeholder="e.g., Caring Hearts Homecare"
+                                            value={businessData.businessName || ''}
+                                            onChange={(e) => setBusinessData({...businessData, businessName: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">Business Address *</label>
+                                        <input 
+                                            type="text" 
+                                            className="input" 
+                                            placeholder="Full address including postcode"
+                                            value={businessData.businessAddress || ''}
+                                            onChange={(e) => setBusinessData({...businessData, businessAddress: e.target.value})}
+                                        />
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">Business Phone Number *</label>
+                                        <input 
+                                            type="tel" 
+                                            className="input" 
+                                            placeholder="e.g., 020 1234 5678"
+                                            value={businessData.businessPhone || ''}
+                                            onChange={(e) => setBusinessData({...businessData, businessPhone: e.target.value})}
+                                        />
+                                    </div>
+                                </>
+                            )}
+
+                            {currentStep === 2 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Director Information</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>Tell us about the business directors</p>
+                                    
+                                    {directors.map((director, index) => (
+                                        <div key={index} style={{ marginBottom: '2rem', padding: '1.5rem', background: 'var(--gray-100)', borderRadius: 'var(--radius-md)' }}>
+                                            <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>Director {index + 1}</h3>
+                                            
+                                            <div className="input-grid">
+                                                <div className="input-group">
+                                                    <label className="input-label">Full Name *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        className="input" 
+                                                        value={director.name}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].name = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Phone Number *</label>
+                                                    <input 
+                                                        type="tel" 
+                                                        className="input" 
+                                                        value={director.phone}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].phone = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Email *</label>
+                                                    <input 
+                                                        type="email" 
+                                                        className="input" 
+                                                        value={director.email}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].email = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Position *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        className="input" 
+                                                        value={director.position}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].position = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Country *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        className="input" 
+                                                        value={director.country}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].country = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Date of Birth *</label>
+                                                    <input 
+                                                        type="date" 
+                                                        className="input" 
+                                                        value={director.dob}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].dob = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Place of Birth *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        className="input" 
+                                                        value={director.birthPlace}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].birthPlace = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="input-group">
+                                                    <label className="input-label">Occupation *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        className="input" 
+                                                        value={director.occupation}
+                                                        onChange={(e) => {
+                                                            const newDirectors = [...directors];
+                                                            newDirectors[index].occupation = e.target.value;
+                                                            setDirectors(newDirectors);
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="input-group">
+                                                <label className="input-label">Current Address *</label>
+                                                <input 
+                                                    type="text" 
+                                                    className="input" 
+                                                    value={director.address}
+                                                    onChange={(e) => {
+                                                        const newDirectors = [...directors];
+                                                        newDirectors[index].address = e.target.value;
+                                                        setDirectors(newDirectors);
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    <button className="btn btn-outline" onClick={addDirector} style={{ marginTop: '1rem' }}>
+                                        + Add Another Director
+                                    </button>
+                                </>
+                            )}
+
+                            {currentStep === 3 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Registered Manager</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>Information about your Registered Manager</p>
+                                    
+                                    <div className="input-grid">
+                                        <div className="input-group">
+                                            <label className="input-label">Full Name *</label>
+                                            <input 
+                                                type="text" 
+                                                className="input" 
+                                                value={registeredManager.name}
+                                                onChange={(e) => setRegisteredManager({...registeredManager, name: e.target.value})}
+                                            />
+                                        </div>
+
+                                        <div className="input-group">
+                                            <label className="input-label">Phone Number *</label>
+                                            <input 
+                                                type="tel" 
+                                                className="input" 
+                                                value={registeredManager.phone}
+                                                onChange={(e) => setRegisteredManager({...registeredManager, phone: e.target.value})}
+                                            />
+                                        </div>
+
+                                        <div className="input-group">
+                                            <label className="input-label">Email *</label>
+                                            <input 
+                                                type="email" 
+                                                className="input" 
+                                                value={registeredManager.email}
+                                                onChange={(e) => setRegisteredManager({...registeredManager, email: e.target.value})}
+                                            />
+                                        </div>
+
+                                        <div className="input-group">
+                                            <label className="input-label">Qualification *</label>
+                                            <input 
+                                                type="text" 
+                                                className="input" 
+                                                placeholder="e.g., Level 5 Diploma in Leadership"
+                                                value={registeredManager.qualification}
+                                                onChange={(e) => setRegisteredManager({...registeredManager, qualification: e.target.value})}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="input-group">
+                                        <label className="input-label">Address *</label>
+                                        <input 
+                                            type="text" 
+                                            className="input" 
+                                            value={registeredManager.address}
+                                            onChange={(e) => setRegisteredManager({...registeredManager, address: e.target.value})}
+                                        />
+                                    </div>
+                                </>
+                            )}
+
+                            {currentStep === 4 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Care Service Type</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>What type of care will you provide?</p>
+                                    
+                                    <div className="radio-group">
+                                        {['Domiciliary Care', 'Supported Living', 'Residential Care'].map((type) => (
+                                            <label key={type} className="radio-option">
+                                                <input 
+                                                    type="radio" 
+                                                    name="careType" 
+                                                    value={type}
+                                                    checked={businessData.careType === type}
+                                                    onChange={(e) => setBusinessData({...businessData, careType: e.target.value})}
+                                                    className="radio-input"
+                                                />
+                                                <div className="radio-label">
+                                                    <div className="radio-icon">{type === 'Domiciliary Care' ? '🏠' : type === 'Supported Living' ? '🏘️' : '🏢'}</div>
+                                                    <div>
+                                                        <h3>{type}</h3>
+                                                        <p style={{ color: 'var(--gray-700)', fontSize: '0.95rem' }}>
+                                                            {type === 'Domiciliary Care' ? 'Support people in their own homes' : 
+                                                             type === 'Supported Living' ? 'Enable independent living with support' :
+                                                             '24-hour residential care setting'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {currentStep === 5 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Service Area</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>Where will you operate?</p>
+                                    
+                                    <div className="input-grid">
+                                        <div className="input-group">
+                                            <label className="input-label">Service Area Postcode *</label>
+                                            <input 
+                                                type="text" 
+                                                className="input" 
+                                                placeholder="e.g., SW1A 1AA"
+                                                value={businessData.postcode || ''}
+                                                onChange={(e) => setBusinessData({...businessData, postcode: e.target.value})}
+                                            />
+                                        </div>
+
+                                        <div className="input-group">
+                                            <label className="input-label">Service Radius (miles) *</label>
+                                            <input 
+                                                type="number" 
+                                                className="input" 
+                                                placeholder="e.g., 10"
+                                                value={businessData.radius || ''}
+                                                onChange={(e) => setBusinessData({...businessData, radius: e.target.value})}
+                                            />
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+{currentStep === 6 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Capacity & Specializations</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>Tell us about your expected capacity</p>
+                                    
+                                    <div className="input-group">
+                                        <label className="input-label">Expected Number of Service Users *</label>
+                                        <div className="radio-group">
+                                            {['5-20', '20-50', '50+'].map((range) => (
+                                                <label key={range} className="radio-option">
+                                                    <input 
+                                                        type="radio" 
+                                                        name="capacity" 
+                                                        value={range}
+                                                        checked={businessData.capacity === range}
+                                                        onChange={(e) => setBusinessData({...businessData, capacity: e.target.value})}
+                                                        className="radio-input"
+                                                    />
+                                                    <div className="radio-label">
+                                                        <div className="radio-icon">{range === '5-20' ? '👥' : range === '20-50' ? '👨‍👩‍👧‍👦' : '🏙️'}</div>
+                                                        <div>
+                                                            <h3>{range} Service Users</h3>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="input-group" style={{ marginTop: '2rem' }}>
+                                        <label className="input-label">Specializations (select all that apply) *</label>
+                                        {['Elderly Care', 'Learning Disabilities', 'Physical Disabilities', 'Mental Health', 'Dementia Care'].map((spec) => (
+                                            <label key={spec} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', border: '2px solid var(--gray-300)', borderRadius: 'var(--radius-md)', marginBottom: '0.5rem', cursor: 'pointer' }}>
+                                                <input 
+                                                    type="checkbox" 
+                                                    style={{ width: '20px', height: '20px' }}
+                                                    checked={(businessData.specializations || []).includes(spec)}
+                                                    onChange={(e) => {
+                                                        const specs = businessData.specializations || [];
+                                                        if (e.target.checked) {
+                                                            setBusinessData({...businessData, specializations: [...specs, spec]});
+                                                        } else {
+                                                            setBusinessData({...businessData, specializations: specs.filter(s => s !== spec)});
+                                                        }
+                                                    }}
+                                                />
+                                                <span style={{ fontWeight: '600' }}>{spec}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {currentStep === 7 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Staffing Plans</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>How many staff will you employ?</p>
+                                    
+                                    <div className="input-grid">
+                                        <div className="input-group">
+                                            <label className="input-label">Expected Number of Care Workers *</label>
+                                            <input 
+                                                type="number" 
+                                                className="input" 
+                                                placeholder="e.g., 10"
+                                                value={businessData.staffCount || ''}
+                                                onChange={(e) => setBusinessData({...businessData, staffCount: e.target.value})}
+                                            />
+                                        </div>
+
+                                        <div className="input-group">
+                                            <label className="input-label">Operating Hours *</label>
+                                            <select 
+                                                className="input"
+                                                value={businessData.hours || ''}
+                                                onChange={(e) => setBusinessData({...businessData, hours: e.target.value})}
+                                            >
+                                                <option value="">Select...</option>
+                                                <option value="9am-5pm">9am-5pm (Office hours)</option>
+                                                <option value="7am-10pm">7am-10pm (Extended hours)</option>
+                                                <option value="24/7">24/7 (Round the clock)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {currentStep === 8 && (
+                                <>
+                                    <h2 style={{ marginBottom: '0.5rem' }}>Review & Submit</h2>
+                                    <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>Please review your information before we generate your documents</p>
+                                    
+                                    <div style={{ background: 'var(--primary-light)', padding: '2rem', borderRadius: 'var(--radius-md)' }}>
+                                        <h3 style={{ marginBottom: '1rem' }}>Business Details</h3>
+                                        <p><strong>Name:</strong> {businessData.businessName}</p>
+                                        <p><strong>Address:</strong> {businessData.businessAddress}</p>
+                                        <p><strong>Phone:</strong> {businessData.businessPhone}</p>
+                                        <p><strong>Care Type:</strong> {businessData.careType}</p>
+                                        <p><strong>Service Area:</strong> {businessData.postcode} ({businessData.radius} miles radius)</p>
+                                        <p><strong>Capacity:</strong> {businessData.capacity} service users</p>
+                                        <p><strong>Specializations:</strong> {(businessData.specializations || []).join(', ')}</p>
+                                        
+                                        <h3 style={{ marginTop: '2rem', marginBottom: '1rem' }}>Directors</h3>
+                                        {directors.map((dir, i) => (
+                                            <div key={i} style={{ marginBottom: '1rem' }}>
+                                                <p><strong>Director {i+1}:</strong> {dir.name} ({dir.position})</p>
+                                            </div>
+                                        ))}
+
+                                        <h3 style={{ marginTop: '2rem', marginBottom: '1rem' }}>Registered Manager</h3>
+                                        <p><strong>Name:</strong> {registeredManager.name}</p>
+                                        <p><strong>Qualification:</strong> {registeredManager.qualification}</p>
+                                    </div>
+                                </>
+                            )}
+
+                            <div className="nav-buttons">
+                                <button 
+                                    className="btn btn-outline" 
+                                    onClick={handleBack}
+                                    disabled={currentStep === 1}
+                                >
+                                    ← Back
+                                </button>
+                                <button className="btn btn-accent" onClick={handleNext}>
+                                    {currentStep === totalSteps ? 'Generate My Documents →' : 'Next →'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Document Generation Screen
+        function GeneratingDocuments({ businessData, setCurrentView, setGeneratedDocs }) {
+            const [progress, setProgress] = useState(0);
+            const [currentStep, setCurrentStep] = useState('Analyzing your information...');
+
+            useEffect(() => {
+                const steps = [
+                    { duration: 1000, progress: 15, text: 'Analyzing business information...' },
+                    { duration: 2000, progress: 30, text: 'Generating Statement of Purpose...' },
+                    { duration: 2000, progress: 50, text: 'Creating Service User Guide...' },
+                    { duration: 1500, progress: 65, text: 'Writing Safeguarding Policy...' },
+                    { duration: 1500, progress: 80, text: 'Preparing Business Plan...' },
+                    { duration: 1000, progress: 95, text: 'Generating logo options...' },
+                    { duration: 1000, progress: 100, text: 'Complete! Redirecting...' }
+                ];
+
+                let currentStepIndex = 0;
+
+                const runNextStep = () => {
+                    if (currentStepIndex < steps.length) {
+                        const step = steps[currentStepIndex];
+                        setCurrentStep(step.text);
+                        setProgress(step.progress);
+                        currentStepIndex++;
+                        setTimeout(runNextStep, step.duration);
+                    } else {
+                        // Generate actual document
+                        generateDocument(businessData);
+                        setTimeout(() => setCurrentView('logo-selection'), 500);
+                    }
+                };
+
+                runNextStep();
+            }, []);
+
+            const generateDocument = (data) => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Title
+                doc.setFontSize(20);
+                doc.setFont(undefined, 'bold');
+                doc.text('Statement of Purpose', 105, 20, { align: 'center' });
+                
+                // Business name
+                doc.setFontSize(16);
+                doc.text(data.businessName || 'Care Business', 105, 35, { align: 'center' });
+                
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'normal');
+                
+                let y = 50;
+                
+                // Business Information
+                doc.setFont(undefined, 'bold');
+                doc.text('Business Information', 20, y);
+                doc.setFont(undefined, 'normal');
+                y += 10;
+                
+                doc.text(`Business Name: ${data.businessName || 'N/A'}`, 20, y);
+                y += 7;
+                doc.text(`Address: ${data.businessAddress || 'N/A'}`, 20, y);
+                y += 7;
+                doc.text(`Phone: ${data.businessPhone || 'N/A'}`, 20, y);
+                y += 7;
+                doc.text(`Care Type: ${data.careType || 'N/A'}`, 20, y);
+                y += 7;
+                doc.text(`Service Area: ${data.postcode || 'N/A'} (${data.radius || 'N/A'} miles)`, 20, y);
+                y += 15;
+                
+                // Directors
+                doc.setFont(undefined, 'bold');
+                doc.text('Company Directors', 20, y);
+                doc.setFont(undefined, 'normal');
+                y += 10;
+                
+                (data.directors || []).forEach((dir, i) => {
+                    doc.text(`Director ${i+1}: ${dir.name || 'N/A'}`, 20, y);
+                    y += 7;
+                    doc.text(`  Position: ${dir.position || 'N/A'}`, 20, y);
+                    y += 7;
+                    doc.text(`  Email: ${dir.email || 'N/A'}`, 20, y);
+                    y += 10;
+                });
+                
+                // Registered Manager
+                doc.setFont(undefined, 'bold');
+                doc.text('Registered Manager', 20, y);
+                doc.setFont(undefined, 'normal');
+                y += 10;
+                
+                const rm = data.registeredManager || {};
+                doc.text(`Name: ${rm.name || 'N/A'}`, 20, y);
+                y += 7;
+                doc.text(`Qualification: ${rm.qualification || 'N/A'}`, 20, y);
+                y += 7;
+                doc.text(`Email: ${rm.email || 'N/A'}`, 20, y);
+                y += 15;
+                
+                // Service Description
+                doc.setFont(undefined, 'bold');
+                doc.text('Service Description', 20, y);
+                doc.setFont(undefined, 'normal');
+                y += 10;
+                
+                const description = `${data.businessName || 'This care business'} provides ${data.careType || 'care services'} with a focus on ${(data.specializations || []).join(', ') || 'comprehensive care'}. We serve ${data.capacity || 'multiple'} service users in the ${data.postcode || 'local'} area, with a commitment to person-centred, high-quality care delivery.`;
+                
+                const splitDescription = doc.splitTextToSize(description, 170);
+                doc.text(splitDescription, 20, y);
+                
+                // Save
+                const blob = doc.output('blob');
+                setGeneratedDocs({ statementOfPurpose: blob });
+            };
+
+            return (
+                <div className="container">
+                    <div className="card" style={{ maxWidth: '600px', margin: '4rem auto', textAlign: 'center' }}>
+                        <div className="loading">
+                            <div className="spinner"></div>
+                            <h2 style={{ marginBottom: '1rem' }}>Generating Your Documents</h2>
+                            <p style={{ color: 'var(--gray-700)', marginBottom: '2rem' }}>{currentStep}</p>
+                            
+                            <div className="progress-bar">
+                                <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                            </div>
+                            
+                            <p style={{ marginTop: '1rem', fontWeight: '600', color: 'var(--primary)' }}>
+                                {progress}% complete
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Logo Selection Screen
+        function LogoSelection({ businessData, setCurrentView, setSelectedLogo }) {
+            const [selected, setSelected] = useState(null);
+            
+            const logoOptions = [
+                { id: 1, bg: 'linear-gradient(135deg, #007E8F 0%, #00B4A6 100%)', text: businessData.businessName?.substring(0,2).toUpperCase() || 'CH' },
+                { id: 2, bg: 'linear-gradient(135deg, #38A169 0%, #48BB78 100%)', text: businessData.businessName?.substring(0,2).toUpperCase() || 'CH' },
+                { id: 3, bg: 'linear-gradient(135deg, #DD6B20 0%, #F6AD55 100%)', text: businessData.businessName?.substring(0,2).toUpperCase() || 'CH' }
+            ];
+
+            const handleContinue = () => {
+                if (selected) {
+                    setSelectedLogo(logoOptions.find(l => l.id === selected));
+                    setCurrentView('branding');
+                }
+            };
+
+            return (
+                <div className="container">
+                    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                        <h1 style={{ marginBottom: '1rem' }}>Choose Your Logo</h1>
+                        <p style={{ color: 'var(--gray-700)', fontSize: '1.125rem', marginBottom: '3rem' }}>
+                            We've generated 3 logo options for {businessData.businessName}. Select your favorite!
+                        </p>
+
+                        <div className="logo-grid">
+                            {logoOptions.map((logo) => (
+                                <label key={logo.id} className="logo-option">
+                                    <input 
+                                        type="radio" 
+                                        name="logo" 
+                                        value={logo.id}
+                                        checked={selected === logo.id}
+                                        onChange={(e) => setSelected(parseInt(e.target.value))}
+                                    />
+                                    <div className="logo-display" style={{ background: logo.bg, color: 'white' }}>
+                                        {logo.text}
+                                    </div>
+                                    <p style={{ textAlign: 'center', marginTop: '1rem', fontWeight: '600' }}>
+                                        Option {logo.id}
+                                    </p>
+                                </label>
+                            ))}
+                        </div>
+
+                        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                            <button 
+                                className="btn btn-accent" 
+                                onClick={handleContinue}
+                                disabled={!selected}
+                                style={{ minWidth: '200px' }}
+                            >
+                                Continue with Selected Logo →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Branding Screen (ID Badge + Business Card)
+        function BrandingScreen({ businessData, selectedLogo, setCurrentView }) {
+            return (
+                <div className="container">
+                    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                        <h1 style={{ marginBottom: '1rem' }}>Your Branding Assets</h1>
+                        <p style={{ color: 'var(--gray-700)', fontSize: '1.125rem', marginBottom: '3rem' }}>
+                            We've created professional ID badges and business cards for your team
+                        </p>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', marginBottom: '3rem' }}>
+                            {/* ID Badge */}
+                            <div className="card">
+                                <h3 style={{ marginBottom: '2rem' }}>Staff ID Badge</h3>
+                                <div style={{ border: '2px solid var(--gray-300)', borderRadius: 'var(--radius-md)', padding: '2rem', background: 'var(--white)', textAlign: 'center' }}>
+                                    <div style={{ width: '100px', height: '100px', margin: '0 auto 1rem', background: selectedLogo?.bg || '#007E8F', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '2rem', fontWeight: '800' }}>
+                                        {selectedLogo?.text || 'CH'}
+                                    </div>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>[Staff Name]</div>
+                                    <div style={{ color: 'var(--gray-700)', marginBottom: '0.5rem' }}>Care Worker</div>
+                                    <div style={{ fontSize: '1.125rem', fontWeight: '600', color: 'var(--primary)' }}>{businessData.businessName}</div>
+                                    <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: 'var(--gray-500)' }}>ID: 00001</div>
+                                </div>
+                                <button className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
+                                    Download Template
+                                </button>
+                            </div>
+
+                            {/* Business Card */}
+                            <div className="card">
+                                <h3 style={{ marginBottom: '2rem' }}>Business Card</h3>
+                                <div style={{ border: '2px solid var(--gray-300)', borderRadius: 'var(--radius-md)', padding: '2rem', background: selectedLogo?.bg || '#007E8F', color: 'white' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+                                        <div style={{ width: '60px', height: '60px', background: 'white', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: '800', color: selectedLogo?.bg?.split(' ')[1]?.replace('100%', '').replace(',', '') || '#007E8F' }}>
+                                            {selectedLogo?.text || 'CH'}
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: '1.25rem', fontWeight: '700' }}>{businessData.businessName}</div>
+                                            <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>Professional Care Services</div>
+                                        </div>
+                                    </div>
+                                    <div style={{ fontSize: '0.95rem' }}>
+                                        <div style={{ marginBottom: '0.5rem' }}>📞 {businessData.businessPhone}</div>
+                                        <div style={{ marginBottom: '0.5rem' }}>📍 {businessData.postcode}</div>
+                                        <div>✉️ info@{businessData.businessName?.toLowerCase().replace(/\s+/g, '') || 'care'}.co.uk</div>
+                                    </div>
+                                </div>
+                                <button className="btn btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
+                                    Download Template
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style={{ textAlign: 'center' }}>
+                            <button className="btn btn-accent" onClick={() => setCurrentView('website')}>
+                                Continue to Website Content →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Website Content Screen
+        function WebsiteContent({ businessData, setCurrentView }) {
+            const websiteContent = {
+                home: `Welcome to ${businessData.businessName || 'Our Care Business'} - providing exceptional ${businessData.careType || 'care services'} in the ${businessData.postcode || 'local'} area. With a dedicated team of ${businessData.staffCount || 'experienced'} care professionals, we're committed to delivering person-centred care that enables our service users to live fulfilling, independent lives.`,
+                
+                about: `${businessData.businessName || 'We'} was founded with a simple mission: to provide high-quality, compassionate care that truly makes a difference. Our team specializes in ${(businessData.specializations || []).join(', ') || 'comprehensive care services'}, serving ${businessData.capacity || 'multiple'} service users across our service area.`,
+                
+                services: `Our ${businessData.careType || 'care services'} include personal care, medication support, companionship, and assistance with daily activities. We work closely with each service user to create personalized care plans that respect their dignity, independence, and individual needs.`,
+                
+                contact: `Get in touch with ${businessData.businessName || 'us'} today to learn more about our services. Call us on ${businessData.businessPhone || '[phone number]'} or visit us at ${businessData.businessAddress || '[address]'}.`
+            };
+
+            return (
+                <div className="container">
+                    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                        <h1 style={{ marginBottom: '1rem' }}>Your Website Content</h1>
+                        <p style={{ color: 'var(--gray-700)', fontSize: '1.125rem', marginBottom: '3rem' }}>
+                            AI-generated content for your 5-page care business website
+                        </p>
+
+                        {Object.entries(websiteContent).map(([page, content]) => (
+                            <div key={page} className="card" style={{ marginBottom: '2rem' }}>
+                                <h3 style={{ textTransform: 'capitalize', marginBottom: '1rem' }}>{page} Page</h3>
+                                <p style={{ color: 'var(--gray-700)', lineHeight: '1.8' }}>{content}</p>
+                            </div>
+                        ))}
+
+                        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                            <button className="btn btn-accent" onClick={() => setCurrentView('documents')}>
+                                View All Documents →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Interview Prep with Voice Input
+        function InterviewPrep() {
+            const [answer, setAnswer] = useState('');
+            const [isRecording, setIsRecording] = useState(false);
+            const [showFeedback, setShowFeedback] = useState(false);
+            const [feedback, setFeedback] = useState(null);
+            const [feedbackTab, setFeedbackTab] = useState('strengths');
+            const recognitionRef = useRef(null);
+
+            useEffect(() => {
+                // Initialize speech recognition
+                if ('webkitSpeechRecognition' in window) {
+                    const recognition = new window.webkitSpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    
+                    recognition.onresult = (event) => {
+                        let interimTranscript = '';
+                        let finalTranscript = '';
+
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            const transcript = event.results[i][0].transcript;
+                            if (event.results[i].isFinal) {
+                                finalTranscript += transcript + ' ';
+                            } else {
+                                interimTranscript += transcript;
+                            }
+                        }
+
+                        setAnswer(prev => prev + finalTranscript);
+                    };
+
+                    recognition.onerror = (event) => {
+                        console.error('Speech recognition error:', event.error);
+                        setIsRecording(false);
+                    };
+
+                    recognitionRef.current = recognition;
+                }
+            }, []);
+
+            const toggleRecording = () => {
+                if (!recognitionRef.current) {
+                    alert('Speech recognition is not supported in your browser. Please use Chrome or Edge.');
+                    return;
+                }
+
+                if (isRecording) {
+                    recognitionRef.current.stop();
+                    setIsRecording(false);
+                } else {
+                    recognitionRef.current.start();
+                    setIsRecording(true);
+                }
+            };
+
+            const handleSubmit = () => {
+                const analysis = analyzeAnswer(answer);
+                setFeedback(analysis);
+                setShowFeedback(true);
+            };
+
+            if (showFeedback && feedback) {
+                return (
+                    <div className="container">
+                        <div className="card">
+                            <button 
+                                className="btn btn-outline" 
+                                onClick={() => {
+                                    setShowFeedback(false);
+                                    setAnswer('');
+                                }}
+                                style={{ marginBottom: '2rem' }}
+                            >
+                                ← Try Another Question
+                            </button>
+
+                            <div style={{ textAlign: 'center', margin: '3rem 0' }}>
+                                <div className="score-circle">
+                                    {feedback.score}<span style={{ fontSize: '1.5rem' }}>/10</span>
+                                </div>
+                                <h2>{feedback.score >= 8 ? 'Excellent Response!' : feedback.score >= 6 ? 'Good Response - Room for Improvement' : 'Needs Strengthening'}</h2>
+                                <p style={{ color: 'var(--gray-700)', fontSize: '1.125rem', maxWidth: '600px', margin: '1rem auto 0' }}>
+                                    Word count: {feedback.wordCount} words
+                                </p>
+                            </div>
+
+                            <div className="tabs">
+                                <button className={`tab ${feedbackTab === 'strengths' ? 'active' : ''}`} onClick={() => setFeedbackTab('strengths')}>
+                                    ✓ Strengths ({feedback.strengths.length})
+                                </button>
+                                <button className={`tab ${feedbackTab === 'improvements' ? 'active' : ''}`} onClick={() => setFeedbackTab('improvements')}>
+                                    ↗ Improvements ({feedback.improvements.length})
+                                </button>
+                            </div>
+
+                            <div style={{ padding: '2rem 0' }}>
+                                {feedbackTab === 'strengths' && (
+                                    <ul className="feedback-list">
+                                        {feedback.strengths.map((strength, i) => (
+                                            <li key={i}>
+                                                <div className="feedback-icon">✓</div>
+                                                <div><p style={{ color: 'var(--gray-700)' }}>{strength}</p></div>
+                                            </li>
+                                        ))}
+                                        {feedback.strengths.length === 0 && <p style={{ color: 'var(--gray-500)', textAlign: 'center' }}>No specific strengths identified. Try adding more detail to your answer.</p>}
+                                    </ul>
+                                )}
+
+                                {feedbackTab === 'improvements' && (
+                                    <ul className="feedback-list">
+                                        {feedback.improvements.map((improvement, i) => (
+                                            <li key={i}>
+                                                <div className="feedback-icon improvement">!</div>
+                                                <div><p style={{ color: 'var(--gray-700)' }}>{improvement}</p></div>
+                                            </li>
+                                        ))}
+                                        {feedback.improvements.length === 0 && <p style={{ color: 'var(--gray-500)', textAlign: 'center' }}>Great job! No major improvements needed.</p>}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="container">
+                    <div className="card">
+                        <span style={{ display: 'inline-block', padding: '0.5rem 1rem', background: 'var(--primary)', color: 'white', borderRadius: '100px', fontSize: '0.875rem', fontWeight: '600', marginBottom: '1rem' }}>
+                            Safe
+                        </span>
+                        
+                        <h2 style={{ margin: '1rem 0 2rem', fontSize: '1.5rem', lineHeight: '1.6', fontFamily: 'Crimson Pro, serif' }}>
+                            Can you walk me through your safeguarding policy? Give me an example of how you'd handle a safeguarding concern involving potential financial abuse of an elderly service user.
+                        </h2>
+
+                        <div style={{ margin: '2rem 0' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                <label className="input-label">Your Answer</label>
+                                <button 
+                                    className={`voice-btn ${isRecording ? 'recording' : ''}`}
+                                    onClick={toggleRecording}
+                                >
+                                    {isRecording ? '⏹ Stop Recording' : '🎤 Voice Input'}
+                                </button>
+                            </div>
+                            <textarea 
+                                className="textarea" 
+                                placeholder="Type your answer here, or use the voice input button above to speak your response. Aim for 500-1000 words. Be specific, use examples, and reference CQC standards where relevant."
+                                value={answer}
+                                onChange={(e) => setAnswer(e.target.value)}
+                            ></textarea>
+                            <div style={{ textAlign: 'right', color: 'var(--gray-500)', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+                                {answer.split(' ').filter(w => w).length} words
+                            </div>
+                        </div>
+
+                        <div style={{ background: 'var(--accent-soft)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '2rem' }}>
+                            <h4 style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                💡 <span>Interview Tip</span>
+                            </h4>
+                            <p style={{ color: 'var(--gray-700)' }}>
+                                CQC inspectors are looking for evidence that you understand safeguarding is everyone's responsibility, not just management. Mention how you embed this culture through training, supervision, and your recruitment process.
+                            </p>
+                        </div>
+
+                        <button 
+                            className="btn btn-accent" 
+                            style={{ width: '100%' }} 
+                            onClick={handleSubmit}
+                            disabled={answer.split(' ').filter(w => w).length < 50}
+                        >
+                            Submit Answer for AI Analysis →
+                        </button>
+                        
+                        {answer.split(' ').filter(w => w).length < 50 && (
+                            <p style={{ textAlign: 'center', color: 'var(--gray-500)', marginTop: '1rem', fontSize: '0.875rem' }}>
+                                Please write at least 50 words to get meaningful feedback
+                            </p>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Documents View
+        function Documents({ generatedDocs }) {
+            const downloadDocument = () => {
+                if (generatedDocs?.statementOfPurpose) {
+                    const url = URL.createObjectURL(generatedDocs.statementOfPurpose);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'Statement_of_Purpose.pdf';
+                    link.click();
+                    URL.revokeObjectURL(url);
+                }
+            };
+
+            return (
+                <div className="container">
+                    <h1 style={{ marginBottom: '1rem' }}>Your Documents</h1>
+                    <p style={{ color: 'var(--gray-700)', fontSize: '1.125rem', marginBottom: '3rem' }}>
+                        All your generated CQC registration documents
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                        <div className="card" style={{ padding: '1.5rem', cursor: 'pointer' }}>
+                            <div style={{ width: '56px', height: '56px', background: 'linear-gradient(135deg, var(--primary-light) 0%, var(--accent-soft) 100%)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '1rem' }}>
+                                📄
+                            </div>
+                            <h3 style={{ marginBottom: '0.5rem' }}>Statement of Purpose</h3>
+                            <p style={{ color: 'var(--gray-500)', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                                Generated today
+                            </p>
+                            <button className="btn btn-primary" style={{ width: '100%' }} onClick={downloadDocument}>
+                                Download PDF
+                            </button>
+                        </div>
+
+                        <div className="card" style={{ padding: '1.5rem', opacity: 0.6 }}>
+                            <div style={{ width: '56px', height: '56px', background: 'linear-gradient(135deg, var(--primary-light) 0%, var(--accent-soft) 100%)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '1rem' }}>
+                                📋
+                            </div>
+                            <h3 style={{ marginBottom: '0.5rem' }}>Service User Guide</h3>
+                            <p style={{ color: 'var(--gray-500)', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                                In full version
+                            </p>
+                            <button className="btn btn-primary" style={{ width: '100%' }} disabled>
+                                Download PDF
+                            </button>
+                        </div>
+
+                        <div className="card" style={{ padding: '1.5rem', opacity: 0.6' }}>
+                            <div style={{ width: '56px', height: '56px', background: 'linear-gradient(135deg, var(--primary-light) 0%, var(--accent-soft) 100%)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', marginBottom: '1rem' }}>
+                                🛡️
+                            </div>
+                            <h3 style={{ marginBottom: '0.5rem' }}>Safeguarding Policy</h3>
+                            <p style={{ color: 'var(--gray-500)', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                                In full version
+                            </p>
+                            <button className="btn btn-primary" style={{ width: '100%' }} disabled>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main App
+        function App() {
+            const [currentView, setCurrentView] = useState('questionnaire');
+            const [businessData, setBusinessData] = useState({});
+            const [selectedLogo, setSelectedLogo] = useState(null);
+            const [generatedDocs, setGeneratedDocs] = useState(null);
+
+            return (
+                <>
+                    <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+                    {currentView === 'questionnaire' && <Questionnaire businessData={businessData} setBusinessData={setBusinessData} setCurrentView={setCurrentView} />}
+                    {currentView === 'generating' && <GeneratingDocuments businessData={businessData} setCurrentView={setCurrentView} setGeneratedDocs={setGeneratedDocs} />}
+                    {currentView === 'logo-selection' && <LogoSelection businessData={businessData} setCurrentView={setCurrentView} setSelectedLogo={setSelectedLogo} />}
+                    {currentView === 'branding' && <BrandingScreen businessData={businessData} selectedLogo={selectedLogo} setCurrentView={setCurrentView} />}
+                    {currentView === 'website' && <WebsiteContent businessData={businessData} setCurrentView={setCurrentView} />}
+                    {currentView === 'documents' && <Documents generatedDocs={generatedDocs} />}
+                    {currentView === 'interview' && <InterviewPrep />}
+                </>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
